@@ -1,0 +1,301 @@
+<html>
+    
+    <head>
+
+	<!-- Import EaselJS Framework -->
+	<script src="EaselJS_v0_3_2/src/easeljs/utils/UID.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/geom/Matrix2D.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/events/MouseEvent.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/SpriteSheet.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Shadow.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/DisplayObject.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Container.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Stage.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Bitmap.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/BitmapSequence.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Graphics.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Shape.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/display/Text.js"></script>
+	<script src="EaselJS_v0_3_2/src/easeljs/utils/Ticker.js"></script>
+	<!-- End EaselJS Imports -->
+        <script type="text/javascript">
+
+            
+            shadowOn=false;     //toggle shadow on/off to see performance drop
+            tickOn=false;
+		stressTest=false;	//whether to draw the multiple circles at the end
+
+		cols=30;
+		rows=6;
+
+            function init(){
+	      canvas=document.getElementById('canvas1');    //get the canvas element from HTML
+	      
+	      canvas.height=1000;
+	      canvas.width=1750;
+            }
+            
+            function test(){
+            stage = new Stage(canvas);
+            stage.enableMouseOver(50);
+            
+            stage.x=0;
+            stage.y=0;
+            stage.mouseEnabled = true;
+
+            //red circle
+            var circle1 = new Shape();
+            circle1.mouseEnabled = true;
+            circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(400,400,200);
+            circle1.onMouseOver=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(400,400,200);
+			if (!tickOn){stage.update();}
+            }
+            circle1.onMouseOut=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(400,400,200);
+		      if (!tickOn){stage.update();}
+            }
+            if (shadowOn){
+            	circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+            }
+            //smaller green circle
+            var circle2 = new Shape();
+            circle2.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(400,400,150);
+            circle2.onMouseOver=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(0,255,0,1.0)").drawCircle(400,400,150);
+			if (!tickOn){stage.update();}
+            }
+            circle2.onMouseOut=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(400,400,150);
+			if (!tickOn){stage.update();}
+            }
+            if (shadowOn){
+            	circle2.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+            }
+            
+            stage.addChild(circle1);
+            stage.addChild(circle2);
+            
+            //side by side circles
+            
+            //red circle
+            var circle1 = new Shape();
+            circle1.mouseEnabled = true;
+            circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(100,100,40);
+            circle1.onMouseOver=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(100,100,50);
+			if (!tickOn){stage.update();}
+            }
+            circle1.onMouseOut=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(100,100,40);
+			if (!tickOn){stage.update();}
+            }
+            if (shadowOn){
+            	circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+            }
+            //smaller green circle
+            var circle2 = new Shape();
+            circle2.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(200,100,40);
+            circle2.onMouseOver=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(0,255,0,1.0)").drawCircle(200,100,50);
+			if (!tickOn){stage.update();}
+            }
+            circle2.onMouseOut=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(200,100,40);
+			if (!tickOn){stage.update();}
+            }
+            if (shadowOn){
+            	circle2.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+            }
+            
+            stage.addChild(circle1);
+            stage.addChild(circle2);
+            
+            //side by side circles (overlaps on onmouseover)
+            
+            //red circle
+            var circle1 = new Shape();
+            circle1.mouseEnabled = true;
+            circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(500,100,40);
+            circle1.onMouseOver=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(500,100,80);
+			if (!tickOn){stage.update();}
+            }
+            circle1.onMouseOut=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(500,100,40);
+			if (!tickOn){stage.update();}
+            }
+            if (shadowOn){
+            	circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+            }
+            //smaller green circle
+            var circle2 = new Shape();
+            circle2.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(600,100,40);
+            circle2.onMouseOver=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(0,255,0,1.0)").drawCircle(600,100,80);
+			if (!tickOn){stage.update();}
+            }
+            circle2.onMouseOut=function(){
+		      this.graphics=new Graphics();
+		      this.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(600,100,40);
+			if (!tickOn){stage.update();}
+            }
+            if (shadowOn){
+            	circle2.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+            }
+            
+            stage.addChild(circle1);
+            stage.addChild(circle2);
+            
+		if (stressTest){
+			var r=20;
+
+			for (var j=0;j<rows;j++){
+				for (var i=0;i<cols;i++){
+					var circle1 = new Shape();
+					circle1.mouseEnabled = true;
+					circle1.i=i;
+					circle1.j=j;
+		
+					circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(i*2.1*r+2*r,600+j*2.1*r+2*r,r);
+					circle1.onMouseOver=function(){
+						this.graphics=new Graphics();
+						this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(this.i*2.1*r+2*r,600+this.j*2.1*r+2*r,1.2*r);
+						if (!tickOn){stage.update();}
+					}
+					circle1.onMouseOut=function(){
+						this.graphics=new Graphics();
+						this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(this.i*2.1*r+2*r,600+this.j*2.1*r+2*r,r);
+						if (!tickOn){stage.update();}
+					}
+					if (shadowOn){
+						circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+					}
+					stage.addChild(circle1);
+				}
+			}
+		}
+            // add a text object to output the current FPS:
+            fpsLabel = new Text("-- fps","bold 18px Arial","rgba(0,0,0,1)");
+            stage.addChild(fpsLabel);
+            fpsLabel.x = 10;
+            fpsLabel.y = 20;
+            
+		if (!tickOn){
+			stage.update();
+		}
+            else{
+		      Ticker.addListener(window);
+		      Ticker.setFPS(25);
+		}
+	}    
+            
+            function tick() {    
+            fpsLabel.text = Math.round(Ticker.getMeasuredFPS())+" fps";
+            
+            // draw the updates to stage:
+            stage.update();
+            }
+
+		function toggleShadows(){
+			shadowOn =!shadowOn; 
+			test();
+		}
+
+		function toggleTick(){
+			if (tickOn){
+				Ticker.removeListener(window);
+				fpsLabel.text ="-- fps";
+				stage.update();
+			}
+			else{
+				Ticker.addListener(window);
+			}
+			tickOn=!tickOn;
+		}
+
+		function toggleStressTest(){
+			stressTest =!stressTest; 
+			test();
+		}
+
+		function changeFPS(){
+			select=document.getElementById('fps')
+			Ticker.setFPS(select.options[select.selectedIndex].value)
+		}
+	
+		function changeRows(){
+			select=document.getElementById('rows')
+			rows=select.options[select.selectedIndex].value
+
+			test();
+		}
+	
+		function changeCols(){
+			select=document.getElementById('cols')
+			cols=select.options[select.selectedIndex].value
+
+			test();
+		}
+        </script>
+    </head>
+	<div class="description">
+	This example is meant to highlight the performance issues in EaselJS, particularly as how to they effect mouse over transitions.
+	<br/><br/>
+	<input type="checkbox" onClick="toggleShadows();"/> Shadows toggled
+	<input type="checkbox" onClick="toggleTick();"/> Tick toggled (FPS
+
+	<select id="fps" onchange="changeFPS();">
+	<option value="2">2</option>
+	<option value="10">10</option>
+	<option value="25" selected="selected">25</option>
+	<option value="50">50</option>
+	</select>
+	 )
+	<input type="checkbox" onClick="toggleStressTest();"/> Stress Test toggled (Rows
+
+	<select id="rows" onchange="changeRows();">
+	<option value="2">2</option>
+	<option value="4">4</option>
+	<option value="6" selected="selected">6</option>
+	<option value="8">8</option>
+	</select>
+	, Cols
+
+	<select id="cols" onchange="changeCols();">
+	<option value="10">10</option>
+	<option value="20">20</option>
+	<option value="30" selected="selected">30</option>
+	<option value="50">50</option>
+	</select>
+	 )
+
+	</div>
+    <body onload="init();test();" bgcolor="yellow">
+        <canvas id="canvas1" width="500" height="500"></canvas>
+    </body>
+    
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
