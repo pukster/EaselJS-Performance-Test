@@ -1,0 +1,21 @@
+This is a simple performance test using EaselJS v 3.2
+
+It is also the first performance test I have made for EaselJS. Bear in mind that I am running these tests off of a Penthium 4 Linux machine with multiple programs running in the background. I expect a quad core to perform better =)
+
+I started making it after I noticed certain problems with EaselJS and mouse movements. More specifically there was a delay between when the mouse entered and when the mouseOver event was triggered. This delay was made more noticable when certain elements were implemented (ie. shadows, a ticker, gradients...)
+
+This performance test allows the user to toggle on and edit the following
+1)Toggle Shadows
+2)Toggle Ticker (if no ticker used, stage updated only as necessary)
+3)Change FPS of the ticker
+4)Toggle Stress test (draws collection of adjacent circles)
+5)Control size of stress test
+
+Performance Results:
+
+-Shadows cause the greatest drain on performance (this is nothing new). With shadows off, the color transition on the mouseOver events is almost instantaneous. With shadows on, even with the six main circles, there is a quarter second delay. Toggling the ticker on/off has no affect on this. If the stress test is toggled on and set to a max amount of 8x50 the delay approaches 1s.
+
+-If only the stress test is emplployed, without shadows, the performance hit is less, but nevertheless still dependent on the size of the stress test.
+
+Odd behaviour:
+-One odd thing I have noticed is that after a long period, the web page begins to slow down and I have to refresh. I don't know if this is an error on my part, or Easel's.
