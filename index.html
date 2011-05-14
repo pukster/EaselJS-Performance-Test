@@ -23,169 +23,95 @@
             
             shadowOn=false;     //toggle shadow on/off to see performance drop
             tickOn=false;
-		stressTest=false;	//whether to draw the multiple circles at the end
-
-		cols=30;
-		rows=6;
+		cacheOn=false;
+		alphaOn=false;
+		r=30;
+		shadow=10;
+		cols=10;
+		rows=4;
 
             function init(){
-	      canvas=document.getElementById('canvas1');    //get the canvas element from HTML
-	      
-	      canvas.height=1000;
-	      canvas.width=1750;
-            }
-            
-            function test(){
-            stage = new Stage(canvas);
-            stage.enableMouseOver(50);
-            
-            stage.x=0;
-            stage.y=0;
-            stage.mouseEnabled = true;
+			canvas=document.getElementById('canvas1');    //get the canvas element from HTML
+			
+			canvas.height=1000;
+			canvas.width=1750;
 
-            //red circle
-            var circle1 = new Shape();
-            circle1.mouseEnabled = true;
-            circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(400,400,200);
-            circle1.onMouseOver=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(400,400,200);
-			if (!tickOn){stage.update();}
-            }
-            circle1.onMouseOut=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(400,400,200);
-		      if (!tickOn){stage.update();}
-            }
-            if (shadowOn){
-            	circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
-            }
-            //smaller green circle
-            var circle2 = new Shape();
-            circle2.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(400,400,150);
-            circle2.onMouseOver=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(0,255,0,1.0)").drawCircle(400,400,150);
-			if (!tickOn){stage.update();}
-            }
-            circle2.onMouseOut=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(400,400,150);
-			if (!tickOn){stage.update();}
-            }
-            if (shadowOn){
-            	circle2.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
+		      stage = new Stage(canvas);
+		      stage.enableMouseOver(50);
+		      
+		      stage.x=0;
+		      stage.y=0;
+		      stage.mouseEnabled = true;
             }
             
-            stage.addChild(circle1);
-            stage.addChild(circle2);
-            
-            //side by side circles
-            
-            //red circle
-            var circle1 = new Shape();
-            circle1.mouseEnabled = true;
-            circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(100,100,40);
-            circle1.onMouseOver=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(100,100,50);
-			if (!tickOn){stage.update();}
-            }
-            circle1.onMouseOut=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(100,100,40);
-			if (!tickOn){stage.update();}
-            }
-            if (shadowOn){
-            	circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
-            }
-            //smaller green circle
-            var circle2 = new Shape();
-            circle2.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(200,100,40);
-            circle2.onMouseOver=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(0,255,0,1.0)").drawCircle(200,100,50);
-			if (!tickOn){stage.update();}
-            }
-            circle2.onMouseOut=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(200,100,40);
-			if (!tickOn){stage.update();}
-            }
-            if (shadowOn){
-            	circle2.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
-            }
-            
-            stage.addChild(circle1);
-            stage.addChild(circle2);
-            
-            //side by side circles (overlaps on onmouseover)
-            
-            //red circle
-            var circle1 = new Shape();
-            circle1.mouseEnabled = true;
-            circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(500,100,40);
-            circle1.onMouseOver=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(500,100,80);
-			if (!tickOn){stage.update();}
-            }
-            circle1.onMouseOut=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(500,100,40);
-			if (!tickOn){stage.update();}
-            }
-            if (shadowOn){
-            	circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
-            }
-            //smaller green circle
-            var circle2 = new Shape();
-            circle2.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(600,100,40);
-            circle2.onMouseOver=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(0,255,0,1.0)").drawCircle(600,100,80);
-			if (!tickOn){stage.update();}
-            }
-            circle2.onMouseOut=function(){
-		      this.graphics=new Graphics();
-		      this.graphics.beginFill("rgba(0,255,0,0.5)").drawCircle(600,100,40);
-			if (!tickOn){stage.update();}
-            }
-            if (shadowOn){
-            	circle2.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
-            }
-            
-            stage.addChild(circle1);
-            stage.addChild(circle2);
-            
-		if (stressTest){
-			var r=20;
-
-			for (var j=0;j<rows;j++){
-				for (var i=0;i<cols;i++){
-					var circle1 = new Shape();
-					circle1.mouseEnabled = true;
-					circle1.i=i;
-					circle1.j=j;
+		function MyContainer(x,y){
+			container=new Container();
+			container.x=x;
+			container.y=y;
+			container.addChild(new Circle());
 		
-					circle1.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(i*2.1*r+2*r,600+j*2.1*r+2*r,r);
-					circle1.onMouseOver=function(){
-						this.graphics=new Graphics();
-						this.graphics.beginFill("rgba(255,0,0,1.0)").drawCircle(this.i*2.1*r+2*r,600+this.j*2.1*r+2*r,1.2*r);
-						if (!tickOn){stage.update();}
-					}
-					circle1.onMouseOut=function(){
-						this.graphics=new Graphics();
-						this.graphics.beginFill("rgba(255,0,0,0.5)").drawCircle(this.i*2.1*r+2*r,600+this.j*2.1*r+2*r,r);
-						if (!tickOn){stage.update();}
-					}
-					if (shadowOn){
-						circle1.shadow=new Shadow("rgba(0,0,0,0.5)",10,-10,10)    //add a little shadow
-					}
-					stage.addChild(circle1);
+			if (cacheOn){
+				//PROBLEM 1: UNCOMMENT BELOW TO REMOVE PROBLEM
+				container.cache(container.x , container.y , 3*r+1.5*shadow , 3*r+1.5*shadow);
+			}
+		      container.onMouseOver=function(){
+				var circle=this.getChildAt(0);
+				circle.graphics=new Graphics();
+				circle.graphics.beginFill(circle.cOver).drawCircle(r+1.5*shadow,r+1.5*shadow,r);
+			
+				if (cacheOn){
+					//PROBLEM 2: UNCOMMENT BELOW TO REMOVE PROBLEM
+					this.cache(this.x , this.y , 3*r+1.5*shadow , 3*r+1.5*shadow);
 				}
+
+				if (!tickOn){stage.update();}
+		      }
+		      container.onMouseOut=function(){
+				var circle=this.getChildAt(0);
+				circle.graphics=new Graphics();
+				circle.graphics.beginFill(circle.cOut).drawCircle(r+1.5*shadow,r+1.5*shadow,r);
+
+				if (cacheOn){
+					//PROBLEM 3: UNCOMMENT BELOW TO REMOVE PROBLEM
+					this.cache(this.x , this.y , 3*r+1.5*shadow , 3*r+1.5*shadow);
+				}
+				if (!tickOn){stage.update();}
+		      }
+
+			return container;
+		}
+
+		function Circle(){
+		      var circle = new Shape();
+		      circle.mouseEnabled = true;
+			if (!alphaOn){	//if transparency values are not allowed, set alpha values to 1
+				AOver=1.0;
+				AOut=1.0;
+			}
+			else{
+				AOver=1.0;
+				AOut=0.7;
+			}
+			circle.cOut=Graphics.getRGB(255,0,255,AOut);
+			circle.cOver=Graphics.getRGB(0,255,0,AOver);
+		      circle.graphics.beginFill(circle.cOut).drawCircle(r+1.5*shadow,r+1.5*shadow,r);
+
+		      if (shadowOn){
+		      	circle.shadow=new Shadow("rgba(0,0,0,0.5)",shadow,-shadow,10)    //add a little shadow
+		      }
+			return circle;
+		}
+
+            function test(){
+
+		//stage.addChild(new Circle(200,200,100,100,100,100,0.5,1.0));
+		for (var j=1;j<=rows;j++){
+			for (var i=0;i<cols;i++){
+				stage.addChild(new MyContainer(i*3*r,j*3*r));
+				//console.log(i*3*r);
 			}
 		}
+
             // add a text object to output the current FPS:
             fpsLabel = new Text("-- fps","bold 18px Arial","rgba(0,0,0,1)");
             stage.addChild(fpsLabel);
@@ -204,12 +130,29 @@
             function tick() {    
             fpsLabel.text = Math.round(Ticker.getMeasuredFPS())+" fps";
             
+		stage.clear();
             // draw the updates to stage:
             stage.update();
             }
 
 		function toggleShadows(){
 			shadowOn =!shadowOn; 
+			stage.removeAllChildren();
+			stage.clear();
+			test();
+		}
+
+		function toggleCache(){
+			cacheOn =!cacheOn; 
+			stage.removeAllChildren();
+			stage.clear();
+			test();
+		}
+
+		function toggleAlpha(){
+			alphaOn =!alphaOn;
+			stage.removeAllChildren();
+			stage.clear(); 
 			test();
 		}
 
@@ -224,12 +167,7 @@
 			}
 			tickOn=!tickOn;
 		}
-
-		function toggleStressTest(){
-			stressTest =!stressTest; 
-			test();
-		}
-
+		/*
 		function changeFPS(){
 			select=document.getElementById('fps')
 			Ticker.setFPS(select.options[select.selectedIndex].value)
@@ -238,6 +176,8 @@
 		function changeRows(){
 			select=document.getElementById('rows')
 			rows=select.options[select.selectedIndex].value
+			stage.removeAllChildren();
+			stage.clear();
 
 			test();
 		}
@@ -245,7 +185,18 @@
 		function changeCols(){
 			select=document.getElementById('cols')
 			cols=select.options[select.selectedIndex].value
+			stage.removeAllChildren();
+			stage.clear();
 
+			test();
+		}
+	
+		function changeRadius(){
+			select=document.getElementById('radius')
+			r=select.options[select.selectedIndex].value
+			stage.removeAllChildren();
+			stage.clear();
+	
 			test();
 		}
         </script>
@@ -253,8 +204,10 @@
 	<div class="description">
 	This example is meant to highlight the performance issues in EaselJS, particularly as how to they effect mouse over transitions.
 	<br/><br/>
-	<input type="checkbox" onClick="toggleShadows();"/> Shadows toggled
-	<input type="checkbox" onClick="toggleTick();"/> Tick toggled (FPS
+	<input type="checkbox" onClick="toggleShadows();"/> Shadows
+	<input type="checkbox" onClick="toggleCache();"/> Cache
+	<input type="checkbox" onClick="toggleAlpha();"/> Alpha
+	<input type="checkbox" onClick="toggleTick();"/> Tick (FPS
 
 	<select id="fps" onchange="changeFPS();">
 	<option value="2">2</option>
@@ -263,23 +216,25 @@
 	<option value="50">50</option>
 	</select>
 	 )
-	<input type="checkbox" onClick="toggleStressTest();"/> Stress Test toggled (Rows
+	Rows=
 
 	<select id="rows" onchange="changeRows();">
 	<option value="2">2</option>
-	<option value="4">4</option>
-	<option value="6" selected="selected">6</option>
+	<option value="4" selected="selected">4</option>
+	<option value="6">6</option>
 	<option value="8">8</option>
-	</select>
-	, Cols
-
-	<select id="cols" onchange="changeCols();">
 	<option value="10">10</option>
 	<option value="20">20</option>
-	<option value="30" selected="selected">30</option>
+	</select>
+	, Cols=
+
+	<select id="cols" onchange="changeCols();">
+	<option value="10" selected="selected">10</option>
+	<option value="20">20</option>
+	<option value="30">30</option>
 	<option value="50">50</option>
 	</select>
-	 )
+	 
 
 	</div>
     <body onload="init();test();" bgcolor="yellow">
