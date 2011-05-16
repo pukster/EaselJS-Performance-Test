@@ -8,8 +8,7 @@ This performance test allows the user to toggle on and edit the following
 1)Toggle Shadows
 2)Toggle Ticker (if no ticker used, stage updated only as necessary)
 3)Change FPS of the ticker
-4)Toggle Stress test (draws collection of adjacent circles)
-5)Control size of stress test
+4)Control size of stress test
 
 Performance Results:
 
@@ -19,3 +18,5 @@ Performance Results:
 
 Odd behaviour:
 -One odd thing I have noticed is that after a long period, the web page begins to slow down and I have to refresh. I don't know if this is an error on my part, or Easel's.
+-I noticed, with the borders, there is always a vertical gap between adjacent borders. I suspect this is due to rounding errors, but I can't figure out why it does not apply to horizontally adjacent borders
+-My biggest problem right now is with caching the containers. Uncached, everything works fine, with the circles displaying rollover behaviour. If I cache the containers using global coordinates (ie. cont.cache(cont.x,cont.y,w,h)) the canvas gets updated accordingly, and everything is redrawn without any difference. However, the canvas coordinates are now doubled for some reason. So if I want the rollover effects, I have to predict where the container would be if doubled in size, and move the mouse over that. If, on the other hand I use container coordinates (ie. cont.cache(0,0,w,h)) then the rollover works as usual, but now the cotnainers are rendered one on top of the other, in the top left hand corner (and only the last drawn circle displays the rollover effects b/c the others are occluded).
