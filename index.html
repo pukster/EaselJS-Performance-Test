@@ -25,10 +25,20 @@
             tickOn=false;
 		cacheOn=false;
 		alphaOn=false;
-		r=30;
+
+		r=30;	//radius of individual circles (no border)
 		shadow=10;
-		cols=10;
-		rows=4;
+		
+		w=8*r;	//container width
+		h=8*r;	//container height
+
+		xOff=100;
+		yOff=100;
+		xPad=30;
+		yPad=30;
+
+		cols=3;
+		rows=3;
 
             function init(){
 			canvas=document.getElementById('canvas1');    //get the canvas element from HTML
@@ -41,39 +51,49 @@
 		      
 		      stage.x=0;
 		      stage.y=0;
-		      stage.mouseEnabled = true;
+		     // stage.mouseEnabled = true;
             }
             
 		function MyContainer(x,y){
 			container=new Container();
 			container.x=x;
 			container.y=y;
+
+			var bgP=1.0;	//percentage to use as backgroung
+			var lw=10;		//line width
+
+			bg=new Shape();
+			container.addChild(bg);
+			bg.graphics.beginFill(Graphics.getRGB(125,0,255,1.0)).rect(xPad/2 , yPad/2,w*bgP,h*bgP).endFill();
+
+			border=new Shape();
+			container.addChild(border);
+			border.graphics.setStrokeStyle(lw).beginStroke(Graphics.getRGB(255,0,255,1.0)).rect(xPad/2 , yPad/2,w*bgP-lw/2,h*bgP-lw/2).endStroke();
+
 			container.addChild(new Circle());
-		
+
 			if (cacheOn){
 				//PROBLEM 1: UNCOMMENT BELOW TO REMOVE PROBLEM
-				container.cache(container.x , container.y , 3*r+1.5*shadow , 3*r+1.5*shadow);
+				//container.cache(container.x , container.y,w+xPad,h+yPad);	//first option draws correctly
+				container.cache(0,0,w+xPad,h+yPad);	//second option interacts correctly with mouse
 			}
 		      container.onMouseOver=function(){
-				var circle=this.getChildAt(0);
-				circle.graphics=new Graphics();
-				circle.graphics.beginFill(circle.cOver).drawCircle(r+1.5*shadow,r+1.5*shadow,r);
-			
+				var circle=this.getChildAt(2);
+				circle._draw(circle.cOver);
 				if (cacheOn){
 					//PROBLEM 2: UNCOMMENT BELOW TO REMOVE PROBLEM
-					this.cache(this.x , this.y , 3*r+1.5*shadow , 3*r+1.5*shadow);
+					this.updateCache();
 				}
 
 				if (!tickOn){stage.update();}
 		      }
 		      container.onMouseOut=function(){
-				var circle=this.getChildAt(0);
-				circle.graphics=new Graphics();
-				circle.graphics.beginFill(circle.cOut).drawCircle(r+1.5*shadow,r+1.5*shadow,r);
+				var circle=this.getChildAt(2);
+				circle._draw(circle.cOut);
 
 				if (cacheOn){
 					//PROBLEM 3: UNCOMMENT BELOW TO REMOVE PROBLEM
-					this.cache(this.x , this.y , 3*r+1.5*shadow , 3*r+1.5*shadow);
+					this.updateCache();
 				}
 				if (!tickOn){stage.update();}
 		      }
@@ -83,49 +103,87 @@
 
 		function Circle(){
 		      var circle = new Shape();
-		      circle.mouseEnabled = true;
+			circle.x=(w+xPad)/2;
+			circle.y=(h+yPad)/2;
+
 			if (!alphaOn){	//if transparency values are not allowed, set alpha values to 1
 				AOver=1.0;
 				AOut=1.0;
 			}
 			else{
 				AOver=1.0;
-				AOut=0.7;
+				AOut=0.6;
 			}
+			circle.onMouseOver=function(){alert();}
 			circle.cOut=Graphics.getRGB(255,0,255,AOut);
 			circle.cOver=Graphics.getRGB(0,255,0,AOver);
-		      circle.graphics.beginFill(circle.cOut).drawCircle(r+1.5*shadow,r+1.5*shadow,r);
+		      circle._draw=function(c){
+				this.graphics=new Graphics();
+				this.graphics.beginFill(c).drawCircle(0,0,r).endFill();
+			}
+			circle._draw(circle.cOut);
 
 		      if (shadowOn){
-		      	circle.shadow=new Shadow("rgba(0,0,0,0.5)",shadow,-shadow,10)    //add a little shadow
+		      	circle.shadow=new Shadow("rgba(0,0,0,0.5)",shadow,-shadow,10)
 		      }
 			return circle;
 		}
 
             function test(){
+			for (var j=0;j<rows;j++){
+				for (var i=0;i<cols;i++){
 
-		//stage.addChild(new Circle(200,200,100,100,100,100,0.5,1.0));
-		for (var j=1;j<=rows;j++){
-			for (var i=0;i<cols;i++){
-				stage.addChild(new MyContainer(i*3*r,j*3*r));
-				//console.log(i*3*r);
+					var borderCase=1;
+					var lw=xPad/2;
+
+					if (borderCase==1){//Case 1 draw a border manually
+						var bgX=i*(w+xPad)+xOff;
+						var bgY=j*(h+yPad)+yOff;
+						var bgW=w+xPad;
+						var bgH=h+yPad;
+						var borderX=i*(w+xPad)+xOff+lw;
+						var borderY=j*(h+yPad)+yOff+lw;
+						var borderW=w+xPad-2*lw;
+						var borderH=h+yPad-2*lw;
+
+						bg=new Shape();
+						stage.addChild(bg);
+						bg.graphics.beginFill(Graphics.getRGB(255,0,0,0.5)).rect(bgX,bgY,bgW,bgH).endFill();
+
+						border=new Shape();
+						stage.addChild(border);
+						border.graphics.beginFill(Graphics.getRGB(0,255,0,0.5)).rect(borderX,borderY,borderW,borderH).endFill();
+					}
+					else if(borderCase==2){//Case 2 stroke a border
+						var borderX=i*(w+xPad)+xOff+lw/2;
+						var borderY=j*(h+yPad)+yOff+lw/2;
+						var borderW=w+xPad-lw;
+						var borderH=h+yPad-lw;
+
+						border=new Shape();
+						stage.addChild(border);
+						border.graphics.setStrokeStyle(lw).beginStroke(Graphics.getRGB(0,255,0,0.5)).rect(borderX,borderY,borderW,borderH).endStroke();
+
+					}
+
+					stage.addChild(new MyContainer(i*(w+xPad)+xOff,j*(h+yPad)+yOff));
+				}
 			}
-		}
 
-            // add a text object to output the current FPS:
-            fpsLabel = new Text("-- fps","bold 18px Arial","rgba(0,0,0,1)");
-            stage.addChild(fpsLabel);
-            fpsLabel.x = 10;
-            fpsLabel.y = 20;
-            
-		if (!tickOn){
-			stage.update();
-		}
-            else{
-		      Ticker.addListener(window);
-		      Ticker.setFPS(25);
-		}
-	}    
+		      // add a text object to output the current FPS:
+		      fpsLabel = new Text("-- fps","bold 18px Arial","rgba(0,0,0,1)");
+		      stage.addChild(fpsLabel);
+		      fpsLabel.x = 10;
+		      fpsLabel.y = 20;
+		      
+			if (!tickOn){
+				stage.update();
+			}
+		      else{
+				Ticker.addListener(window);
+				Ticker.setFPS(25);
+			}
+		}    
             
             function tick() {    
             fpsLabel.text = Math.round(Ticker.getMeasuredFPS())+" fps";
@@ -167,7 +225,7 @@
 			}
 			tickOn=!tickOn;
 		}
-		/*
+		
 		function changeFPS(){
 			select=document.getElementById('fps')
 			Ticker.setFPS(select.options[select.selectedIndex].value)
@@ -220,7 +278,8 @@
 
 	<select id="rows" onchange="changeRows();">
 	<option value="2">2</option>
-	<option value="4" selected="selected">4</option>
+	<option value="3" selected="selected">3</option>
+	<option value="4">4</option>
 	<option value="6">6</option>
 	<option value="8">8</option>
 	<option value="10">10</option>
@@ -229,7 +288,8 @@
 	, Cols=
 
 	<select id="cols" onchange="changeCols();">
-	<option value="10" selected="selected">10</option>
+	<option value="3" selected="selected">3</option>
+	<option value="10">10</option>
 	<option value="20">20</option>
 	<option value="30">30</option>
 	<option value="50">50</option>
